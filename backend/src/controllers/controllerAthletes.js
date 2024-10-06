@@ -14,7 +14,8 @@ class controllerAthletes {
   async getAllAthletes(req, res) {
     try {
       const limit = parseInt(req.query.limit, 10) || 10;
-      const athletes = await athleteService.getAthletes(limit);
+      const { olympicId } = req.body;
+      const athletes = await athleteService.getAthletes(limit, olympicId);
       return res.status(statusCode.OK).json({ message: athletes });
     } catch (error) {
       return res.status(statusCode.INTERNAL_SERVER_ERROR).json({ error: error.message });

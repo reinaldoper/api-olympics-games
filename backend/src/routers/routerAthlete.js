@@ -8,7 +8,7 @@ const routerAthlete = Router();
 const { createAthlete, deleteAthlete, getAllAthletes, getAthleteById,
   getAthleteJoinSports, getAthleteJoinSportsById, updateAthlete, getAthleteBySportId } = controllerAthlete;
 
-routerAthlete.get("/", Auth.validateToken, getAllAthletes);
+routerAthlete.patch("/", Auth.validateToken, getAllAthletes);
 routerAthlete.get("/:id", Auth.validateToken, authId.validateAndRespond, getAthleteById);
 routerAthlete.get("/sport", Auth.validateToken, getAthleteJoinSports);
 routerAthlete.get("/sport/:id", Auth.validateToken, authId.validateAndRespond, getAthleteJoinSportsById);

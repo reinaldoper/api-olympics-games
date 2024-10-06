@@ -2,9 +2,9 @@ import pool from "../../db.js";
 
 
 class AthleteService {
-    async getAthletes(limit) {
-        const query = 'SELECT * FROM Athlete WHERE paralympic = 0 LIMIT ?';
-        const [rows] = await pool.query(query, [limit]);
+    async getAthletes(limit, olympicId) {
+        const query = 'SELECT * FROM Athlete WHERE paralympic = ? LIMIT ?';
+        const [rows] = await pool.query(query, [olympicId, limit]);
         return rows;
     }
     

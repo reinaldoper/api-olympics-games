@@ -8,6 +8,7 @@ export default function AthletePage() {
   const [athletes, setAthletes] = useState<IAthlete | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [limit, setLimit] = useState<string>('');
+  const [olympicId, setOlympicId] = useState<number>(0)
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -20,11 +21,12 @@ export default function AthletePage() {
     const fetchAthletes = async () => {
       try {
         const requestOptions: RequestInit = {
-          method: 'GET',
+          method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': JSON.parse(token)
-          }
+          },
+          body: JSON.stringify({ olympicId }),
         };
 
         const response = await fetch('http://localhost:3001/athlete', requestOptions);
@@ -60,11 +62,12 @@ export default function AthletePage() {
   const handleLimit = async () => {
     try {
       const requestOptions: RequestInit = {
-        method: 'GET',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': JSON.parse(token)
-        }
+        },
+        body: JSON.stringify({ olympicId }),
       };
 
       const response = await fetch(`http://localhost:3001/athlete?limit=${limit}`, requestOptions);
@@ -84,6 +87,9 @@ export default function AthletePage() {
     }
 
   }
+  const handleToggleOlympicId = () => {
+    setOlympicId((prevOlympicId: number) => (prevOlympicId === 0 ? 1 : 0));
+  };
 
   const { message } = athletes;
 
@@ -120,6 +126,13 @@ export default function AthletePage() {
             />
           </svg>
           <span>Apply Limit</span>
+        </button>
+        <button
+          type="button"
+          onClick={handleToggleOlympicId}
+          className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200"
+        >
+          {olympicId === 0 ? 'Olympic Athletes' : 'Olympic ForOlympics'}
         </button>
       </div>
 
