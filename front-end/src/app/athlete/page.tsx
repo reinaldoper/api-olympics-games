@@ -7,6 +7,7 @@ export default function AthletePage() {
   const [token, setToken] = useState<string>('');
   const [athletes, setAthletes] = useState<IAthlete | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [limit, setLimit] = useState<string>('');
 
   useEffect(() => {
     const storedToken = localStorage.getItem('token');
@@ -34,9 +35,9 @@ export default function AthletePage() {
 
         const data = await response.json();
         setAthletes(data);
-      } catch (err: unknown) { 
+      } catch (err: unknown) {
         if (err instanceof Error) {
-          setError(err.message); 
+          setError(err.message);
         } else {
           setError('An unknown error occurred');
         }
@@ -56,13 +57,72 @@ export default function AthletePage() {
     return <div className="flex justify-center m-auto">Loading...</div>;
   }
 
+  const handleLimit = async () => {
+    try {
+      const requestOptions: RequestInit = {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': JSON.parse(token)
+        }
+      };
+
+      const response = await fetch(`http://localhost:3001/athlete?limit=${limit}`, requestOptions);
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch athletes');
+      }
+
+      const data = await response.json();
+      setAthletes(data);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unknown error occurred');
+      }
+    }
+
+  }
+
   const { message } = athletes;
 
   return (
     <div>
-      <h1 className="flex justify-center text-3xl font-bold text-purple-700 mb-4 mt-6">
+      <h1 className="flex flex-col items-center text-3xl font-bold text-purple-700 mb-6 mt-8">
         Olympics Athletes from Brazil
       </h1>
+      <div className="flex justify-center items-center space-x-4 mb-4">
+        <input
+          type="text"
+          placeholder="Search by Limit..."
+          className="border border-gray-300 rounded-md p-2 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition duration-200"
+          value={limit}
+          onChange={(e) => setLimit(e.target.value)}
+        />
+        <button
+          type="button"
+          onClick={() => handleLimit()}
+          className="bg-purple-500 hover:bg-purple-600 text-white font-semibold py-2 px-4 rounded-md transition duration-200 flex items-center space-x-2"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M5 12h14M12 5l7 7-7 7"
+            />
+          </svg>
+          <span>Apply Limit</span>
+        </button>
+      </div>
+
       <ul className="flex flex-wrap justify-center w-11/12 lg:w-3/4 m-auto gap-6">
         {message.map((athlete) => (
           <li
