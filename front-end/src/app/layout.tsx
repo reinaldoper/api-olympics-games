@@ -31,7 +31,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="bg-white shadow-md w-full h-16 text-slate-950">
+        <header className="bg-slate-800 shadow-md w-full h-16 text-slate-100">
           <nav className="flex justify-between items-center h-full w-full px-6">
             <div className="text-lg font-semibold">
               {isLoggedIn ? (
